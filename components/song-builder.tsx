@@ -9,11 +9,10 @@ import { PromptHistory } from "./prompt-history"
 import { QuickPresets } from "./quick-presets"
 import { LyricsGenerator } from "./lyrics-generator"
 import { CustomLyricsEditor } from "./custom-lyrics-editor"
-import { HarmonyEditor } from "./harmony-editor"
 import { generateFullOutput, type PromptHistoryItem } from "@/lib/suno-tags"
-import { Music, Tags, FileText, Clock, Sparkles, RotateCcw, Wand2, PenLine, Users } from "lucide-react"
+import { Music, Tags, FileText, Clock, Sparkles, RotateCcw, Wand2, PenLine } from "lucide-react"
 
-type Tab = "tags" | "ai" | "custom" | "harmonies" | "structure" | "preview" | "history"
+type Tab = "tags" | "ai" | "custom" | "structure" | "preview" | "history"
 
 export function SongBuilder() {
   const [selectedTags, setSelectedTags] = useState<string[]>([])
@@ -67,13 +66,6 @@ export function SongBuilder() {
     setActiveTab("structure")
   }, [])
 
-  const addHarmonyTags = useCallback((tags: string[]) => {
-    setSelectedTags((prev) => {
-      const newTags = tags.filter((t) => !prev.includes(t))
-      return [...prev, ...newTags]
-    })
-  }, [])
-
   const clearAll = useCallback(() => {
     setSelectedTags([])
     setStructureLyrics("")
@@ -83,7 +75,6 @@ export function SongBuilder() {
     { id: "tags" as Tab, label: "Tags", labelRu: "Теги", icon: Tags, count: selectedTags.length },
     { id: "ai" as Tab, label: "AI Lyrics", labelRu: "AI Текст", icon: Wand2 },
     { id: "custom" as Tab, label: "My Text", labelRu: "Мой текст", icon: PenLine },
-    { id: "harmonies" as Tab, label: "Harmonies", labelRu: "Хоры", icon: Users },
     { id: "structure" as Tab, label: "Structure", labelRu: "Структура", icon: FileText },
     { id: "preview" as Tab, label: "Preview", labelRu: "Превью", icon: Sparkles },
     { id: "history" as Tab, label: "History", labelRu: "История", icon: Clock, count: history.length },
@@ -166,13 +157,6 @@ export function SongBuilder() {
             onInsertLyrics={insertAiLyrics}
             selectedTags={selectedTags}
             onApplyRandomStyle={setSelectedTags}
-          />
-        )}
-        {activeTab === "harmonies" && (
-          <HarmonyEditor
-            onInsertHarmonies={insertAiLyrics}
-            onAddHarmonyTags={addHarmonyTags}
-            selectedTags={selectedTags}
           />
         )}
         {activeTab === "structure" && (
